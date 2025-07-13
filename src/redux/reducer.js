@@ -1,5 +1,11 @@
 import { statusFilters } from './constants';
-import { combineReducers } from 'redux';
+import {
+  addTask,
+  deleteTask,
+  setStatusFilter,
+  toggleCompleted,
+} from './actions';
+import { createReducer } from '@reduxjs/toolkit';
 
 const tasksInitialState = [
   { id: 0, text: 'Learn HTML and CSS', completed: true },
@@ -9,50 +15,33 @@ const tasksInitialState = [
   { id: 4, text: 'Build amazing apps', completed: false },
 ];
 
-// Відповідає лише за оновлення властивості tasks
-// Тепер значенням параметра state буде масив завдань
-const tasksReducer = (state = tasksInitialState, action) => {
-  switch (action.type) {
-    case 'tasks/addTask':
-      return [...state, action.payload];
-    case 'tasks/deleteTask':
-      return state.filter(task => task.id !== action.payload);
-    case 'tasks/toggleCompleted':
-      return state.map(task => {
-        if (task.id !== action.payload) {
-          return task;
-        }
-        return { ...task, completed: !task.completed };
-      });
-    default:
-      return state;
-  }
-};
+//=====================After refactoring=====================
+
+export const tasksReducer = createReducer(tasksInitialState, {
+  [addTask]: (state, action) => {
+    state.push(action.payload);
+  },
+  [deleteTask]: (state, action) => {
+    return state.filter(task => task.id !== action.payload);
+  },
+  [toggleCompleted]: (state, action) => {
+    return state.map(task => {
+      if (task.id !== action.payload) {
+        return task;
+      }
+      return { ...task, completed: !task.completed };
+    });
+  },
+});
 
 const filtersInitialState = {
   status: statusFilters.all,
 };
 
-// Відповідає лише за оновлення властивості filters
-// Тепер значенням параметра state буде об'єкт фільтрів
-const filtersReducer = (state = filtersInitialState, action) => {
-  switch (action.type) {
-    case 'filters/setStatusFilter':
-      return {
-        ...state,
-        status: action.payload,
-      };
-    default:
-      return state;
-  }
-};
+//=====================After refactoring=====================
 
-// Код редюсерів tasksReducer та filtersReducer
-// Імпортуємо функцію композиції редюсерів
-
-// Код редюсерів tasksReducer та filtersReducer
-
-export const rootReducer = combineReducers({
-  tasks: tasksReducer,
-  filters: filtersReducer,
+export const filtersReducer = createReducer(filtersInitialState, {
+  [setStatusFilter]: (state, action) => {
+    state.status = action.payload;
+  },
 });
