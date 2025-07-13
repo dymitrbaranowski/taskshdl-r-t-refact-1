@@ -32,11 +32,6 @@ export const Task = ({ task }) => {
         type="checkbox"
         onChange={handleToggle}
         onClick={event => event.stopPropagation()} // Запобігаємо спрацьовуванню події на батьківському елементі
-        // onClick={handleTaskClick} // Додаємо обробник події на весь блок завдання
-        // onClick={handleButtonClick} // Додаємо обробник події на кнопку видалення
-        // onClick={handleDelete} // Додаємо обробник події на кнопку видалення
-        // onClick={event => event.stopPropagation()} // Запобігаємо спрацьовуванню події на батьківському елементі
-        // onClick={handleToggle} // Додаємо обробник події на чекбокс
         className={css.checkbox}
         checked={task.completed}
         readOnly
